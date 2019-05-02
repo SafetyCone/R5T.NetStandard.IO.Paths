@@ -2,3 +2,23 @@ R5T.NetStandard.IO.Paths - A library containing file IO path related functionali
 
 Goals
 
+* Create strongly-typed path-part types
+* Create a path Utilities class, that operates on both strings and strong-typed path-parts.
+* Include System.IO.Path function wrappers that add explanations to the b\base functions.
+
+
+Design
+
+Note that there is no validation (by default) on the string values of the various strongly-typed path parts. Any string, valid or not, actually rooted or not, an actual path or not, can be put into the part part types. A validation framework is provided.
+
+Extension methods are provided that turn strings into different path parts.
+
+Extension methods are provided that turn strings into different path parts, and validate that the input string is valid for the desired path part.
+
+Making AbsolutePath abstract (non-instantiable) in favor of the concrete (instantiable) DirectoryPath and FilePath makes users think about each path, and whether they are expecting a file or directory.
+
+Among the two path types, absolute and relative, absolute is the default path type. Thus there is no "AbsoluteFilePath", only "FilePath", while there is a "RelativeFilePath".
+
+Directory relative paths can be relative to either a directory or file path. In the same way, file relative paths can be relative to both directory and file paths.
+
+Among the two file name types, with extension and without extension, with extension is the default file name type. Thus there is no "FileNameWithExtension", only "FileName", while there is a "FileNameWithoutExtenion".
