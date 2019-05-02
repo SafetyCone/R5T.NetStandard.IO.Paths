@@ -1,0 +1,4 @@
+R5T.NetStandard.IO.Paths - A library containing file IO path related functionality.
+
+Goals
+

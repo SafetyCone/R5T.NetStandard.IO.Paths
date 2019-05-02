@@ -1,0 +1,4 @@
+R5T.NetStandard.IO.Paths.Construction - A construction console entry-point for the R5T.NetStandard.IO.Paths library (A library containing file IO path related functionality.).
+
+Goals
+
