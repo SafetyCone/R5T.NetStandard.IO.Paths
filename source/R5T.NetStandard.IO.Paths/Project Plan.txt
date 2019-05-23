@@ -9,6 +9,13 @@ Goals
 
 Design
 
+Among the strongly-typed path types, everything is a PathSegment, except for:
+	
+	* AbsolutePath and its derivatives, DirectoryPath and FilePath. An absolute path is not a path segment, it is a full path.
+	* FileNameWithoutExtension, FileExtension, and GenericFileNameSegment. These are file name segments, and must first be combined into a file name, which is a path segment, before being combined into a path.
+	* GenericDirectoryNameSegment. This is a directory name segment, and must first be combined with other directory name segments into a directory name, which is a path segment, before being combined into a path.
+
+
 Note that there is no validation (by default) on the string values of the various strongly-typed path parts. Any string, valid or not, actually rooted or not, an actual path or not, can be put into the part part types. A validation framework is provided.
 
 Extension methods are provided that turn strings into different path parts.
@@ -22,3 +29,14 @@ Among the two path types, absolute and relative, absolute is the default path ty
 Directory relative paths can be relative to either a directory or file path. In the same way, file relative paths can be relative to both directory and file paths.
 
 Among the two file name types, with extension and without extension, with extension is the default file name type. Thus there is no "FileNameWithExtension", only "FileName", while there is a "FileNameWithoutExtenion".
+
+
+Combine
+
+By far the most common path operation is combining path parts into a path.
+
+The System.IO.Path.Combine() method operates on strings but is, however, broken and limited. Broken in that if any of the path segments startup with the platform directory separator, segments before them are ignored! For example, (@"C:\", @"\temp", @"temp.txt") -> "\temp\temp.txt". Limited in that the executing platform directory separator will be used with no possibility of overloading to allow, for example, creating Linux paths on a Windows machine or Windows paths on a Linux machine.
+        
+There is then the Utilities.Combine() method that operates on strings. It allows specifying the directory separator using Utilities.CombineUsingDirectorySeparator(), and helpfully includes both Utilities.CombineWindows() and Utilities.CombineNonWindows() methods that specify their respective directory separators. The Utilities.Combine() method itself uses the currently executing platform directory separator. This method is robust in that it trims platform and platform-alternate directory separators from the ends of all path segments (except for the last segment, allowing the last segment to use a final directory separator), and the beginnings of all path segments (except the first, allowing for non-Windows rooted directories), to get just plain path segments. Any platform-alternate directory path separators (platform-alternate relative to the specified input directory path separator) within the path segments are replaced with the platform directory path separator. And finally all path segments are joined using the specified input directory path separator.
+
+Finally, there is the Utilities.Combine() method that operates on strongly-typed path parts (which derive from TypedString).

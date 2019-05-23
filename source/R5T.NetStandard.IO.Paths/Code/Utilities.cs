@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 
+using R5T.NetStandard.OS;
+
 
 namespace R5T.NetStandard.IO.Paths
 {
@@ -23,7 +25,7 @@ namespace R5T.NetStandard.IO.Paths
         /// </remarks>
         public const char DefaultFileExtensionSeparatorChar = '.';
         public static readonly string DefaultFileExtensionSeparator = Utilities.DefaultFileExtensionSeparatorChar.ToString();
-        public const char DefaultFileNameSegmentSeparatorChar = Utilities.DefaultFileExtensionSeparatorChar;
+        public const char DefaultFileNameSegmentSeparatorChar = '.';
         public static readonly string DefaultFileNameSegmentSeparator = Utilities.DefaultFileNameSegmentSeparatorChar.ToString();
         public const char DefaultWindowsDirectorySeparatorChar = '\\';
         public static readonly string DefaultWindowsDirectorySeparator = Utilities.DefaultWindowsDirectorySeparatorChar.ToString();
@@ -33,9 +35,9 @@ namespace R5T.NetStandard.IO.Paths
         /// Provides the default directory separator on the currently executing platform.
         /// </summary>
         public static readonly string DefaultDirectorySeparator = Utilities.PlatformDirectorySeparator;
-        public static readonly char DefaultVolumeSeparatorChar = Path.VolumeSeparatorChar;
+        public static readonly char DefaultVolumeSeparatorChar = Path.VolumeSeparatorChar; // ':' as in "C:\..."
         public static readonly string DefaultVolumeSeparator = Utilities.DefaultVolumeSeparatorChar.ToString();
-        public static readonly char DefaultPathSeparatorChar = Path.PathSeparator;
+        public static readonly char DefaultPathSeparatorChar = Path.PathSeparator; // ';' as in path1;path2;path3
         public static readonly string DefaultPathSeparator = Utilities.DefaultPathSeparatorChar.ToString();
 
 
@@ -46,19 +48,11 @@ namespace R5T.NetStandard.IO.Paths
         {
             get
             {
-                var output = OsHelper.PlatformSwitch(
-                    () =>
-                    {
-                        return Utilities.DefaultWindowsDirectorySeparator;
-                    },
-                    () =>
-                    {
-                        return Utilities.DefaultNonWindowsDirectorySeparator;
-                    },
-                    () =>
-                    {
-                        return Utilities.DefaultNonWindowsDirectorySeparator;
-                    });
+                string windows() => Utilities.DefaultWindowsDirectorySeparator;
+                string osx() => Utilities.DefaultNonWindowsDirectorySeparator;
+                string linux() => Utilities.DefaultNonWindowsDirectorySeparator;
+
+                var output = OsHelper.PlatformSwitch(windows, osx, linux);
                 return output;
             }
         }
@@ -75,6 +69,7 @@ namespace R5T.NetStandard.IO.Paths
         }
         /// <summary>
         /// Between the Windows ('\\') and the non-Windows ('/') directory separator, given one, return the other.
+        /// If the input directory separator is neither the Windows nor non-Windows separator, the Windows separator is returned.
         /// </summary>
         public static string GetAlternateDirectorySeparator(string directorySeparator)
         {
@@ -103,6 +98,7 @@ namespace R5T.NetStandard.IO.Paths
 
             throw new Exception($@"Unable to detect platform for path '{path}'.");
         }
+
 
         public static string GetDirectorySeparator(string path)
         {
@@ -165,7 +161,9 @@ namespace R5T.NetStandard.IO.Paths
         /// <summary>
         /// Wraps <see cref="Path.Combine(string[])"/>. Combines path segments into a single path.
         /// Example: (@"C:\", @"temp", @"temp.txt") -> "C:\temp\temp.txt".
-        /// The executing platform path separator will be used with no possibility of overloading.
+        /// The method is broken and limited.
+        /// Broken in that if any of the path segments startup with the platform directory separator, segments before them are ignored!
+        /// Limited in that the executing platform directory separator will be used with no possibility of overloading to allow, for example, creating Linux paths on a Windows machine or Windows paths on a Linux machine.
         /// </summary>
         /// <remarks>
         /// For best results, make sure path segments do not start with the platform separator:
@@ -381,11 +379,84 @@ namespace R5T.NetStandard.IO.Paths
 
         #endregion
 
-        #region Paths as Strings.
+        #region Paths as strings.
+
+        /// <summary>
+        /// Combines path segments using the specified directory separator, after trimming both platform and platform-alternate directory separators, and replacment of platform-alternate directory separators with platform directory separators.
+        /// * All segments except the last are trimmed of ending path segments.
+        /// * All segments except the first are trimmed of starting path segments.
+        /// * All segments have platform-alternate path separators replaced with platform path separators.
+        /// </summary>
+        public static string CombineUsingDirectorySeparator(string directorySeparator, params string[] pathSegments)
+        {
+            var directorySeparatorAlternate = Utilities.GetAlternateDirectorySeparator(directorySeparator);
+
+            var nSegments = pathSegments.Length;
+
+            // Trim both path separators from the ends of all segments except the last.
+            for (int iSegment = 0; iSegment < nSegments - 1; iSegment++)
+            {
+                var pathSegment = pathSegments[iSegment];
+                var trimmedPathSegment = pathSegment.TrimEnd(Utilities.DefaultWindowsDirectorySeparatorChar, Utilities.DefaultNonWindowsDirectorySeparatorChar);
+                pathSegments[iSegment] = trimmedPathSegment;
+            }
+
+            // Trim both path separators from the starts of all segments after the first.
+            for (int iSegment = 1; iSegment < nSegments; iSegment++)
+            {
+                var pathSegment = pathSegments[iSegment];
+                var trimmedPathSegment = pathSegment.TrimStart(Utilities.DefaultWindowsDirectorySeparatorChar, Utilities.DefaultNonWindowsDirectorySeparatorChar);
+                pathSegments[iSegment] = trimmedPathSegment;
+            }
+
+            // Replace all platform-alternate path separators with platform path separators.
+            for (int iSegment = 0; iSegment < nSegments; iSegment++)
+            {
+                var pathSegment = pathSegments[iSegment];
+                var replacedPathSegment = pathSegment.Replace(directorySeparatorAlternate, directorySeparator);
+                pathSegments[iSegment] = replacedPathSegment;
+            }
+
+            var output = String.Join(directorySeparator, pathSegments);
+            return output;
+        }
+
+        /// <summary>
+        /// Combine path segments using the platform directory separator.
+        /// </summary>
+        public static string Combine(params string[] pathSegments)
+        {
+            var pathSeparator = Utilities.PlatformDirectorySeparator;
+
+            var output = Utilities.CombineUsingDirectorySeparator(pathSeparator, pathSegments);
+            return output;
+        }
+
+        /// <summary>
+        /// Combine path segments using the Windows directory separator.
+        /// </summary>
+        public static string CombineWindows(params string[] pathSegments)
+        {
+            var directorySeparator = Utilities.DefaultWindowsDirectorySeparator;
+
+            var output = Utilities.CombineUsingDirectorySeparator(directorySeparator, pathSegments);
+            return output;
+        }
+
+        /// <summary>
+        /// Combine path segments using the non-Windows directory separator.
+        /// </summary>
+        public static string CombineNonWindows(params string[] pathSegments)
+        {
+            var directorySeparator = Utilities.DefaultNonWindowsDirectorySeparator;
+
+            var output = Utilities.CombineUsingDirectorySeparator(directorySeparator, pathSegments);
+            return output;
+        }
 
         #endregion
 
-        #region Strongly-Typed Paths.
+        #region Strongly-typed paths.
 
         #endregion
     }

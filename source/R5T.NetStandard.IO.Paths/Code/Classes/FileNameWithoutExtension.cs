@@ -3,7 +3,7 @@
 
 namespace R5T.NetStandard.IO.Paths
 {
-    public class FileNameWithoutExtension : TypedString
+    public class FileNameWithoutExtension : FileNameSegment
     {
         public FileNameWithoutExtension()
         {

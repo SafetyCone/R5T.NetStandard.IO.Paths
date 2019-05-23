@@ -13,7 +13,8 @@ namespace R5T.NetStandard.IO.Paths
         {
         }
 
-        public PathSegment(string value) : base(value)
+        public PathSegment(string value)
+            : base(value)
         {
         }
     }
