@@ -9,10 +9,6 @@ namespace R5T.NetStandard.IO.Paths
     /// </summary>
     public abstract class PathSegment : TypedString
     {
-        public PathSegment()
-        {
-        }
-
         public PathSegment(string value)
             : base(value)
         {

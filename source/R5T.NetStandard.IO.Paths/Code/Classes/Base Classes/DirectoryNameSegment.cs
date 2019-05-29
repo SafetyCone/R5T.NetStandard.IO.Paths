@@ -9,10 +9,6 @@ namespace R5T.NetStandard.IO.Paths
     /// </summary>
     public abstract class DirectoryNameSegment : TypedString
     {
-        public DirectoryNameSegment()
-        {
-        }
-
         public DirectoryNameSegment(string value)
             : base(value)
         {

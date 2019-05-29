@@ -5,6 +5,6 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="R5T.NetStandard.OS" Version="0.0.2" />
-    <PackageReference Include="R5T.NetStandard.Types" Version="1.0.4" />
+    <PackageReference Include="R5T.NetStandard.Types" Version="1.0.5" />
   </ItemGroup>
 </Project>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 
 using R5T.NetStandard.OS;
 
@@ -17,40 +18,15 @@ namespace R5T.NetStandard.IO.Paths
         #region Separators.
 
         /// <summary>
-        /// Separates the file-name from the file-extenstion.
-        /// </summary>
-        /// <remarks>
-        /// The .NET source code simply hard-codes this (to '.'), but I don't like that.
-        /// NOTE: There may be multiple periods in a file name. Only the last token when separated is the file extension.
-        /// </remarks>
-        public const char DefaultFileExtensionSeparatorChar = '.';
-        public static readonly string DefaultFileExtensionSeparator = Utilities.DefaultFileExtensionSeparatorChar.ToString();
-        public const char DefaultFileNameSegmentSeparatorChar = '.';
-        public static readonly string DefaultFileNameSegmentSeparator = Utilities.DefaultFileNameSegmentSeparatorChar.ToString();
-        public const char DefaultWindowsDirectorySeparatorChar = '\\';
-        public static readonly string DefaultWindowsDirectorySeparator = Utilities.DefaultWindowsDirectorySeparatorChar.ToString();
-        public const char DefaultNonWindowsDirectorySeparatorChar = '/';
-        public static readonly string DefaultNonWindowsDirectorySeparator = Utilities.DefaultNonWindowsDirectorySeparatorChar.ToString();
-        /// <summary>
-        /// Provides the default directory separator on the currently executing platform.
-        /// </summary>
-        public static readonly string DefaultDirectorySeparator = Utilities.PlatformDirectorySeparator;
-        public static readonly char DefaultVolumeSeparatorChar = Path.VolumeSeparatorChar; // ':' as in "C:\..."
-        public static readonly string DefaultVolumeSeparator = Utilities.DefaultVolumeSeparatorChar.ToString();
-        public static readonly char DefaultPathSeparatorChar = Path.PathSeparator; // ';' as in path1;path2;path3
-        public static readonly string DefaultPathSeparator = Utilities.DefaultPathSeparatorChar.ToString();
-
-
-        /// <summary>
         /// Get the directory separator used on the current platform (the Windows separator on Windows platforms, the non-Windows separator on non-Windows platforms).
         /// </summary>
         public static string PlatformDirectorySeparator
         {
             get
             {
-                string windows() => Utilities.DefaultWindowsDirectorySeparator;
-                string osx() => Utilities.DefaultNonWindowsDirectorySeparator;
-                string linux() => Utilities.DefaultNonWindowsDirectorySeparator;
+                string windows() => Constants.DefaultWindowsDirectorySeparator;
+                string osx() => Constants.DefaultNonWindowsDirectorySeparator;
+                string linux() => Constants.DefaultNonWindowsDirectorySeparator;
 
                 var output = OsHelper.PlatformSwitch(windows, osx, linux);
                 return output;
@@ -67,30 +43,16 @@ namespace R5T.NetStandard.IO.Paths
                 return output;
             }
         }
-        /// <summary>
-        /// Between the Windows ('\\') and the non-Windows ('/') directory separator, given one, return the other.
-        /// If the input directory separator is neither the Windows nor non-Windows separator, the Windows separator is returned.
-        /// </summary>
-        public static string GetAlternateDirectorySeparator(string directorySeparator)
-        {
-            if (directorySeparator == Utilities.DefaultWindowsDirectorySeparator)
-            {
-                return Utilities.DefaultNonWindowsDirectorySeparator;
-            }
-            else
-            {
-                return Utilities.DefaultWindowsDirectorySeparator;
-            }
-        }
+
         public static Platform DetectPlatform(string path)
         {
-            var containsWindows = path.Contains(Utilities.DefaultWindowsDirectorySeparator);
+            var containsWindows = path.Contains(Constants.DefaultWindowsDirectorySeparator);
             if (containsWindows)
             {
                 return Platform.Windows;
             }
 
-            var containsNonWindows = path.Contains(Utilities.DefaultNonWindowsDirectorySeparator);
+            var containsNonWindows = path.Contains(Constants.DefaultNonWindowsDirectorySeparator);
             if (containsNonWindows)
             {
                 return Platform.NonWindows;
@@ -99,20 +61,43 @@ namespace R5T.NetStandard.IO.Paths
             throw new Exception($@"Unable to detect platform for path '{path}'.");
         }
 
+        public static string GetDirectorySeparator(Platform platform)
+        {
+            switch (platform)
+            {
+                case Platform.NonWindows:
+                    return Constants.DefaultNonWindowsDirectorySeparator;
+
+                case Platform.Windows:
+                    return Constants.DefaultWindowsDirectorySeparator;
+
+                default:
+                    var message = EnumHelper.GetUnexpectedEnumerationValueMessage(platform);
+                    throw new ArgumentException(message);
+            }
+        }
 
         public static string GetDirectorySeparator(string path)
         {
             var platform = Utilities.DetectPlatform(path);
-            switch (platform)
+
+            var directorySeparator = Utilities.GetDirectorySeparator(platform);
+            return directorySeparator;
+        }
+
+        /// <summary>
+        /// Between the Windows ('\\') and the non-Windows ('/') directory separator, given one, return the other.
+        /// If the input directory separator is neither the Windows nor non-Windows separator, the Windows separator is returned.
+        /// </summary>
+        public static string GetAlternateDirectorySeparator(string directorySeparator)
+        {
+            if (directorySeparator == Constants.DefaultWindowsDirectorySeparator)
             {
-                case Platform.NonWindows:
-                    return Utilities.DefaultNonWindowsDirectorySeparator;
-
-                case Platform.Windows:
-                    return Utilities.DefaultWindowsDirectorySeparator;
-
-                default:
-                    throw new Exception(EnumHelper.GetUnexpectedEnumerationValueMessage(platform));
+                return Constants.DefaultNonWindowsDirectorySeparator;
+            }
+            else
+            {
+                return Constants.DefaultWindowsDirectorySeparator;
             }
         }
 
@@ -397,7 +382,7 @@ namespace R5T.NetStandard.IO.Paths
             for (int iSegment = 0; iSegment < nSegments - 1; iSegment++)
             {
                 var pathSegment = pathSegments[iSegment];
-                var trimmedPathSegment = pathSegment.TrimEnd(Utilities.DefaultWindowsDirectorySeparatorChar, Utilities.DefaultNonWindowsDirectorySeparatorChar);
+                var trimmedPathSegment = pathSegment.TrimEnd(Constants.DefaultWindowsDirectorySeparatorChar, Constants.DefaultNonWindowsDirectorySeparatorChar);
                 pathSegments[iSegment] = trimmedPathSegment;
             }
 
@@ -405,7 +390,7 @@ namespace R5T.NetStandard.IO.Paths
             for (int iSegment = 1; iSegment < nSegments; iSegment++)
             {
                 var pathSegment = pathSegments[iSegment];
-                var trimmedPathSegment = pathSegment.TrimStart(Utilities.DefaultWindowsDirectorySeparatorChar, Utilities.DefaultNonWindowsDirectorySeparatorChar);
+                var trimmedPathSegment = pathSegment.TrimStart(Constants.DefaultWindowsDirectorySeparatorChar, Constants.DefaultNonWindowsDirectorySeparatorChar);
                 pathSegments[iSegment] = trimmedPathSegment;
             }
 
@@ -437,7 +422,7 @@ namespace R5T.NetStandard.IO.Paths
         /// </summary>
         public static string CombineWindows(params string[] pathSegments)
         {
-            var directorySeparator = Utilities.DefaultWindowsDirectorySeparator;
+            var directorySeparator = Constants.DefaultWindowsDirectorySeparator;
 
             var output = Utilities.CombineUsingDirectorySeparator(directorySeparator, pathSegments);
             return output;
@@ -448,15 +433,141 @@ namespace R5T.NetStandard.IO.Paths
         /// </summary>
         public static string CombineNonWindows(params string[] pathSegments)
         {
-            var directorySeparator = Utilities.DefaultNonWindowsDirectorySeparator;
+            var directorySeparator = Constants.DefaultNonWindowsDirectorySeparator;
 
             var output = Utilities.CombineUsingDirectorySeparator(directorySeparator, pathSegments);
             return output;
         }
 
+        public static string GetFileName(string fileNameWithoutExtension, string fileExtensionSeparator, string fileExtension)
+        {
+            var fileName = $"{fileNameWithoutExtension}{fileExtensionSeparator}{fileExtension}";
+            return fileName;
+        }
+
         #endregion
 
         #region Strongly-typed paths.
+
+        /// <summary>
+        /// Combines multiple <see cref="FileNameSegment"/>s into a single <see cref="GenericFileNameSegment"/>.
+        /// Without knowing the context of use, there is now way to know the type of the combined <see cref="FileNameSegment"/>s.
+        /// But, depending on context, the <see cref="GenericFileNameSegment"/> can be converted into the proper file-name type.
+        /// </summary>
+        public static GenericFileNameSegment Combine(FileNameSegmentSeparator fileNameSegmentSeparator, params FileNameSegment[] fileNameSegments)
+        {
+            var fileNameSegmentValue = fileNameSegments.Join(fileNameSegmentSeparator.Value);
+
+            var fileNameSegment = new GenericFileNameSegment(fileNameSegmentValue);
+            return fileNameSegment;
+        }
+
+        public static GenericFileNameSegment Combine(params FileNameSegment[] fileNameSegments)
+        {
+            var fileNameSegment = Utilities.Combine(FileNameSegmentSeparator.Default, fileNameSegments);
+            return fileNameSegment;
+        }
+
+        /// <summary>
+        /// Combines a <see cref="FileNameWithoutExtension"/> with a <see cref="FileExtension"/>, using the specified <see cref="FileExtensionSeparator"/>.
+        /// </summary>
+        public static FileName Combine(FileNameWithoutExtension fileNameWithoutExtension, FileExtension fileExtension, FileExtensionSeparator fileExtensionSeparator)
+        {
+            var genericFileNameSegment = Utilities.Combine(fileExtensionSeparator, fileNameWithoutExtension, fileExtension);
+
+            var fileName = genericFileNameSegment.ToFileName();
+            return fileName;
+        }
+
+        public static FileName Combine(FileNameWithoutExtension fileNameWithoutExtension, FileExtension fileExtension)
+        {
+            var fileName = Utilities.Combine(fileNameWithoutExtension, fileExtension, FileExtensionSeparator.Default);
+            return fileName;
+        }
+
+        /// <summary>
+        /// Gets the <see cref="FileName"/> composed of the specified <see cref="FileNameWithoutExtension"/> and <see cref="FileExtension"/>, joined using the specified <see cref="FileExtensionSeparator"/>.
+        /// </summary>
+        public static FileName GetFileName(FileNameWithoutExtension fileNameWithoutExtension, FileExtension fileExtension, FileExtensionSeparator fileExtensionSeparator)
+        {
+            var fileName = Utilities.Combine(fileNameWithoutExtension, fileExtension, fileExtensionSeparator);
+            return fileName;
+        }
+
+        public static FileName GetFileName(FileNameWithoutExtension fileNameWithoutExtension, FileExtension fileExtension)
+        {
+            var fileName = Utilities.Combine(fileNameWithoutExtension, fileExtension, FileExtensionSeparator.Default);
+            return fileName;
+        }
+
+        /// <summary>
+        /// Combines <see cref="FileNameSegment"/>s into a <see cref="FileNameWithoutExtension"/> using the specified <see cref="FileNameSegmentSeparator"/>.
+        /// </summary>
+        public static FileNameWithoutExtension GetFileNameWithoutExtension(FileNameSegmentSeparator fileNameSegmentSeparator, params FileNameSegment[] fileNameSegments)
+        {
+            var genericFileNameSegment = Utilities.Combine(fileNameSegmentSeparator, fileNameSegments);
+
+            var fileNameWithoutExtension = genericFileNameSegment.ToFileNameWithoutExtension();
+            return fileNameWithoutExtension;
+        }
+
+        public static FileNameWithoutExtension GetFileNameWithoutExtension(params FileNameSegment[] fileNameSegments)
+        {
+            var fileNameWithoutExtension = Utilities.GetFileNameWithoutExtension(FileNameSegmentSeparator.Default, fileNameSegments);
+            return fileNameWithoutExtension;
+        }
+
+        /// <summary>
+        /// Combines multiple <see cref="DirectoryNameSegment"/>s into a single <see cref="GenericDirectoryNameSegment"/>.
+        /// Without knowing the context of use, there is now way to know the type of the combined <see cref="DirectoryNameSegment"/>s.
+        /// But, depending on context, the <see cref="GenericDirectoryNameSegment"/> can be converted into the proper directory-name type.
+        /// </summary>
+        public static GenericDirectoryNameSegment Combine(DirectoryNameSegmentSeparator directoryNameSegmentSeparator, params DirectoryNameSegment[] directoryNameSegments)
+        {
+            var directoryNameSegmentValue = directoryNameSegments.Join(directoryNameSegmentSeparator.Value);
+
+            var directoryNameSegment = new GenericDirectoryNameSegment(directoryNameSegmentValue);
+            return directoryNameSegment;
+        }
+
+        public static GenericDirectoryNameSegment Combine(params DirectoryNameSegment[] directoryNameSegments)
+        {
+            var directoryNameSegment = Utilities.Combine(DirectoryNameSegmentSeparator.Default, directoryNameSegments);
+            return directoryNameSegment;
+        }
+
+        public static DirectoryName GetDirectoryName(DirectoryNameSegmentSeparator directoryNameSegmentSeparator, params DirectoryNameSegment[] directoryNameSegments)
+        {
+            var genericDirectoryNameSegment = Utilities.Combine(directoryNameSegmentSeparator, directoryNameSegments);
+
+            var directoryName = genericDirectoryNameSegment.ToDirectoryName();
+            return directoryName;
+        }
+
+        public static DirectoryName GetDirectoryName(params DirectoryNameSegment[] directoryNameSegments)
+        {
+            var directoryName = Utilities.GetDirectoryName(DirectoryNameSegmentSeparator.Default, directoryNameSegments);
+            return directoryName;
+        }
+
+        public static DirectoryRelativePath Combine(DirectoryPath)
+
+        /// <summary>
+        /// Combines <see cref="PathSegment"/>s using the directory path separator for the specified <see cref="Platform"/>.
+        /// An array of <see cref="PathSegment"/>s can only be combined into a <see cref="PathSegment"/>.
+        /// Depending on context, a <see cref="PathSegment"/> could be converted to a <see cref="DirectoryPath"/> or <see cref="FilePath"/>.
+        /// </summary>
+        public static PathSegment Combine(Platform platform, params PathSegment[] pathSegments)
+        {
+            var values = pathSegments.Select(x => x.Value).ToArray();
+            
+            var combinedValue = Utilities.Combine()
+        }
+
+        public static DirectoryPath Combine(DirectoryPath directoryPath, params PathSegment[] pathSegments)
+        {
+
+        }
 
         #endregion
     }

@@ -10,10 +10,6 @@ namespace R5T.NetStandard.IO.Paths
     /// </summary>
     public abstract class AbsolutePath : TypedString
     {
-        public AbsolutePath()
-        {
-        }
-
         public AbsolutePath(string value)
             : base(value)
         {

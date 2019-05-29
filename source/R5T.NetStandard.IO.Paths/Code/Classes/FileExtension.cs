@@ -8,10 +8,6 @@ namespace R5T.NetStandard.IO.Paths
     /// </summary>
     public class FileExtension : FileNameSegment
     {
-        public FileExtension()
-        {
-        }
-
         public FileExtension(string value)
             : base(value)
         {

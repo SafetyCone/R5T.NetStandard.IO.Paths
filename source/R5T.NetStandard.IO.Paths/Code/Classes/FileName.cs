@@ -9,10 +9,6 @@ namespace R5T.NetStandard.IO.Paths
     /// </summary>
     public class FileName : FilePathSegment
     {
-        public FileName()
-        {
-        }
-
         public FileName(string value)
             : base(value)
         {

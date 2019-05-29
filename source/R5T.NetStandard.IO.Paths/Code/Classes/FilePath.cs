@@ -9,10 +9,6 @@ namespace R5T.NetStandard.IO.Paths
     /// </summary>
     public class FilePath : AbsolutePath
     {
-        public FilePath()
-        {
-        }
-
         public FilePath(string value)
             : base(value)
         {

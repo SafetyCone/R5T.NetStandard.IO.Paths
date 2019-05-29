@@ -9,10 +9,6 @@ namespace R5T.NetStandard.IO.Paths
     /// </summary>
     public class DirectoryPath : AbsolutePath
     {
-        public DirectoryPath()
-        {
-        }
-
         public DirectoryPath(string value)
             : base(value)
         {

@@ -8,10 +8,6 @@ namespace R5T.NetStandard.IO.Paths
     /// </summary>
     public class FileRelativePath : FilePathSegment
     {
-        public FileRelativePath()
-        {
-        }
-
         public FileRelativePath(string value)
             : base(value)
         {

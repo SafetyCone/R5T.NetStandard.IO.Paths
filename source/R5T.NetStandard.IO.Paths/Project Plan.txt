@@ -30,6 +30,16 @@ Directory relative paths can be relative to either a directory or file path. In 
 
 Among the two file name types, with extension and without extension, with extension is the default file name type. Thus there is no "FileNameWithExtension", only "FileName", while there is a "FileNameWithoutExtenion".
 
+Basic Path Operations
+
+* (DONE) Combine file-name and file-extension (get file-name).
+* (DONE) Combine file-name segments into a file-name without extension.
+* (DONE) Combine directory-name segments into a directory-name.
+* Combine directory-path segments into a relative directory path.
+* Combine a directory-path (which is rooted) with directory-path segments to get a directory-path.
+
+* Now, all with and without specification of separators.
+
 
 Combine
 
@@ -39,4 +49,5 @@ The System.IO.Path.Combine() method operates on strings but is, however, broken 
         
 There is then the Utilities.Combine() method that operates on strings. It allows specifying the directory separator using Utilities.CombineUsingDirectorySeparator(), and helpfully includes both Utilities.CombineWindows() and Utilities.CombineNonWindows() methods that specify their respective directory separators. The Utilities.Combine() method itself uses the currently executing platform directory separator. This method is robust in that it trims platform and platform-alternate directory separators from the ends of all path segments (except for the last segment, allowing the last segment to use a final directory separator), and the beginnings of all path segments (except the first, allowing for non-Windows rooted directories), to get just plain path segments. Any platform-alternate directory path separators (platform-alternate relative to the specified input directory path separator) within the path segments are replaced with the platform directory path separator. And finally all path segments are joined using the specified input directory path separator.
 
-Finally, there is the Utilities.Combine() method that operates on strongly-typed path parts (which derive from TypedString).
+Finally, there are the Utilities.Combine() methods that operate on strongly-typed path parts. The most basic 
+
