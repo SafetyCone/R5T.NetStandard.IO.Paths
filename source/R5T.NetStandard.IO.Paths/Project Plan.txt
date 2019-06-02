@@ -35,6 +35,11 @@ Finally, path segments can include things like the current directory name ('.'),
 	[absolute path]{optional, {directory separator} relative path to a file}
 
 
+Design - Combine
+
+By default, combining path parts also resolves the combined path. Resolving removes any relative path names (e.g. "C:\Temp1\Temp2\..\..\temp.txt" => "C:\temp.txt").
+
+
 Design
 
 Note that there is no validation (by default) on the string values of the various strongly-typed path parts. Any string, valid or not, actually rooted or not, an actual path or not, can be put into the part part types. A validation framework is provided.

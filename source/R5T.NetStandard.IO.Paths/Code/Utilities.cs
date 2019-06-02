@@ -364,12 +364,24 @@ namespace R5T.NetStandard.IO.Paths
         #region Paths as strings.
 
         /// <summary>
+        /// Given an unresolved path (ex: "C:\Temp1\Temp2\..\Temp3\Temp4.txt"), get a resolved path (ex: "C:\Temp1\Temp3\Temp4.txt").
+        /// </summary>
+        public static string ResolvePath(string unresolvedPath)
+        {
+            var unresolvedUri = new Uri(unresolvedPath);
+            var localPathUri = unresolvedUri.LocalPath;
+
+            var output = Path.GetFullPath(localPathUri);
+            return output;
+        }
+
+        /// <summary>
         /// Combines path segments using the specified directory separator, after trimming both platform and platform-alternate directory separators, and replacment of platform-alternate directory separators with platform directory separators.
         /// * All segments except the last are trimmed of ending path segments.
         /// * All segments except the first are trimmed of starting path segments.
         /// * All segments have platform-alternate path separators replaced with platform path separators.
         /// </summary>
-        public static string CombineUsingDirectorySeparator(string directorySeparator, params string[] pathSegments)
+        public static string CombineUsingDirectorySeparatorNoResolution(string directorySeparator, params string[] pathSegments)
         {
             var directorySeparatorAlternate = Utilities.GetAlternateDirectorySeparator(directorySeparator);
 
@@ -401,6 +413,17 @@ namespace R5T.NetStandard.IO.Paths
 
             var output = String.Join(directorySeparator, pathSegments);
             return output;
+        }
+
+        /// <summary>
+        /// Combines path segments using the specified directory separator, and resolves the combined path.
+        /// To get an unresolved path, use <see cref="Utilities.CombineUsingDirectorySeparatorNoResolution(string, string[])"/>.
+        /// </summary>
+        public static string CombineUsingDirectorySeparator(string directorySeparator, params string[] pathSegments)
+        {
+            var unresolvedCombinedPathSegment = Utilities.CombineUsingDirectorySeparatorNoResolution(directorySeparator, pathSegments);
+            var combinedPathSegment = Utilities.ResolvePath(unresolvedCombinedPathSegment);
+            return combinedPathSegment;
         }
 
         /// <summary>
@@ -440,7 +463,7 @@ namespace R5T.NetStandard.IO.Paths
         {
             var fileName = $"{fileNameWithoutExtension}{fileExtensionSeparator}{fileExtension}";
             return fileName;
-        }
+        }        
 
         #endregion
 
@@ -715,6 +738,24 @@ namespace R5T.NetStandard.IO.Paths
 
             var directoryPath = Utilities.GetDirectoryPath(directorySeparator, absolutePath, pathSegments);
             return directoryPath;
+        }
+
+        public static AbsolutePath ResolvePath(AbsolutePath unresolvedAbsolutePath)
+        {
+            var resolvedPath = Utilities.ResolvePath(unresolvedAbsolutePath.Value).AsAbsolutePath();
+            return resolvedPath;
+        }
+
+        public static DirectoryPath ResolvePath(DirectoryPath unresolvedDirectoryPath)
+        {
+            var resolvedDirectoryPath = Utilities.ResolvePath(unresolvedDirectoryPath.Value).AsDirectoryPath();
+            return resolvedDirectoryPath;
+        }
+
+        public static FilePath ResolvePath(FilePath unresolvedFilePath)
+        {
+            var resolvedFilePath = Utilities.ResolvePath(unresolvedFilePath.Value).AsFilePath();
+            return resolvedFilePath;
         }
 
         #endregion
