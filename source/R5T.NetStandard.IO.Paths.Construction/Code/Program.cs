@@ -6,7 +6,7 @@ namespace R5T.NetStandard.IO.Paths.Construction
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Examples.SubMain();
         }
     }
 }

@@ -7,18 +7,39 @@ Goals
 * Include System.IO.Path function wrappers that add explanations to the b\base functions.
 
 
-Design
+Design - Overview
+
+All paths take the form:
+
+	[root]{optional, {directory separator}zero or more separated directory names}{optional, {directory separator}file name}
+
+Any path that beings with a root is a rooted, or absolute, path. Thus all paths take the form:
+
+	[absolute path]{optional, {directory separator} zero or more separated directory names}{optional, {directory separator}file name}
 
 Among the strongly-typed path types, everything is a PathSegment, except for:
 	
-	* AbsolutePath and its derivatives, DirectoryPath and FilePath. An absolute path is not a path segment, it is a full path.
+	* AbsolutePath and its derivatives, GenericAbsolutePath, DirectoryPath, and FilePath. An absolute-path is not a path-segment, it is a full path.
 	* FileNameWithoutExtension, FileExtension, and GenericFileNameSegment. These are file name segments, and must first be combined into a file name, which is a path segment, before being combined into a path.
 	* GenericDirectoryNameSegment. This is a directory name segment, and must first be combined with other directory name segments into a directory name, which is a path segment, before being combined into a path.
 
+This means that all paths take the form:
+
+	[absolute path]{optional, {directory separator} zero or more directory-separated path segments}.
+
+This is the form used for all path combining operations. The result is an absolute-path, which, depending on context only known by the caller, can be cast to either a directory-path or file-path.
+
+Finally, path segments can include things like the current directory name ('.'), or the parent directory name ('..'), and can be combined into a relative path to either a directory or a file. Thus all paths take one of the forms:
+
+	[absolute path]{optional, {directory separator} relative path to a directory}
+	[absolute path]{optional, {directory separator} relative path to a file}
+
+
+Design
 
 Note that there is no validation (by default) on the string values of the various strongly-typed path parts. Any string, valid or not, actually rooted or not, an actual path or not, can be put into the part part types. A validation framework is provided.
 
-Extension methods are provided that turn strings into different path parts.
+Extension methods are provided that turn strings into different path part types. These methods are called "As-", not "To-" since they perform no validation on the value of the string, instead only "casting" the string to the specified type.
 
 Extension methods are provided that turn strings into different path parts, and validate that the input string is valid for the desired path part.
 
@@ -35,6 +56,10 @@ Basic Path Operations
 * (DONE) Combine file-name and file-extension (get file-name).
 * (DONE) Combine file-name segments into a file-name without extension.
 * (DONE) Combine directory-name segments into a directory-name.
+* (DONE) Combine an absolute-path with path-segments to get an absolute-path.
+* (DONE) Combine an absolute-path with path-segments to get a directory-path.
+* (DONE) Combine an absolute-path with path-segments to get a file-path.
+
 * Combine directory-path segments into a relative directory path.
 * Combine a directory-path (which is rooted) with directory-path segments to get a directory-path.
 

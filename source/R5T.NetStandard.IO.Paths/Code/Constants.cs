@@ -36,7 +36,7 @@ namespace R5T.NetStandard.IO.Paths
 
         public const char DefaultNonWindowsDirectorySeparatorChar = '/';
         /// <summary>
-        /// Separates directory path segments in non-Windows-stype paths.
+        /// Separates directory path segments in non-Windows-style paths.
         /// </summary>
         public static readonly string DefaultNonWindowsDirectorySeparator = Constants.DefaultNonWindowsDirectorySeparatorChar.ToString();
 

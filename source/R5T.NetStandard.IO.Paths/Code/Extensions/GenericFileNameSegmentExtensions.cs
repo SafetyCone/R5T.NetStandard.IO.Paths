@@ -5,13 +5,13 @@ namespace R5T.NetStandard.IO.Paths
 {
     public static class GenericFileNameSegmentExtensions
     {
-        public static FileName ToFileName(this GenericFileNameSegment fileNameSegment)
+        public static FileName AsFileName(this GenericFileNameSegment fileNameSegment)
         {
             var fileName = new FileName(fileNameSegment.Value);
             return fileName;
         }
 
-        public static FileNameWithoutExtension ToFileNameWithoutExtension(this GenericFileNameSegment fileNameSegment)
+        public static FileNameWithoutExtension AsFileNameWithoutExtension(this GenericFileNameSegment fileNameSegment)
         {
             var fileName = new FileNameWithoutExtension(fileNameSegment.Value);
             return fileName;
