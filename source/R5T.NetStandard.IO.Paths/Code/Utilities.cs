@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 using R5T.NetStandard.OS;
 using R5T.NetStandard.IO.Paths.Extensions;
@@ -563,13 +564,71 @@ namespace R5T.NetStandard.IO.Paths
             return fileNameWithoutExtension;
         }
 
+        public static string GetDirectoryPath(string filePath)
+        {
+            var directoryPath = Path.GetDirectoryName(filePath);
+            return directoryPath;
+        }
+
         #endregion
 
         #region Strongly-typed paths.
 
-        #region Separators
+        #region Executable Path
 
+        /// <summary>
+        /// Gets the path location of the executable file as specified by the first command line argument.
+        /// </summary>
+        /// <remarks>
+        /// The executable file when debugging in Visual Studio is .exe.vshost, not just .exe.
+        /// </remarks>
+        public static FilePath ExecutablePathCommandLineArgument
+        {
+            get
+            {
+                var output = Environment.GetCommandLineArgs()[0].AsFilePath();
+                return output;
+            }
+        }
+        /// <summary>
+        /// Gets the path location of the executable file as specified by the entry assembly's location.
+        /// </summary>
+        public static FilePath ExecutablePathEntryAssembly
+        {
+            get
+            {
+                var output = Assembly.GetEntryAssembly().Location.AsFilePath();
+                return output;
+            }
+        }
+        /// <summary>
+        /// Gets the rooted path of the executable via the default route, <see cref="Utilities.ExecutablePathCommandLineArgument"/>.
+        /// </summary>
+        /// <remarks>
+        /// There are multiple ways to get the location of the executable, and depending on context (unit test, debugging in Visual Studio, or production) different locations are returned.
+        /// The command line argument is chosen as the default since this is the way the program is actually run by the operating system.
+        /// </remarks>
+        public static FilePath ExecutablePath
+        {
+            get
+            {
+                var output = Utilities.ExecutablePathCommandLineArgument;
+                return output;
+            }
+        }
+        /// <summary>
+        /// Gets the directory location of the executable as the directory containing the executable rooted path, <see cref="Utilities.ExecutablePath"/>.
+        /// </summary>
+        public static DirectoryPath ExecutableDirectoryPath
+        {
+            get
+            {
+                var executableFilePath = Utilities.ExecutablePath;
 
+                var output = Utilities.GetDirectoryPath(executableFilePath);
+                return output;
+            }
+        }
 
         #endregion
 
@@ -868,6 +927,12 @@ namespace R5T.NetStandard.IO.Paths
             var directorySeparator = DirectorySeparator.Default;
 
             var directoryPath = Utilities.GetDirectoryPath(directorySeparator, absolutePath, pathSegments);
+            return directoryPath;
+        }
+
+        public static DirectoryPath GetDirectoryPath(FilePath filePath)
+        {
+            var directoryPath = Utilities.GetDirectoryPath(filePath.Value).AsDirectoryPath();
             return directoryPath;
         }
 
