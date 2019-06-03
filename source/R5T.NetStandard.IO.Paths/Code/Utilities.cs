@@ -459,11 +459,38 @@ namespace R5T.NetStandard.IO.Paths
             return output;
         }
 
-        public static string GetFileName(string fileNameWithoutExtension, string fileExtensionSeparator, string fileExtension)
+        /// <summary>
+        /// Creates a file-name from a file-name without extension, file-extension, using the specified file-extension separator.
+        /// </summary>
+        public static string GetFileName(string fileNameWithoutExtension, string fileExtension, string fileExtensionSeparator)
         {
             var fileName = $"{fileNameWithoutExtension}{fileExtensionSeparator}{fileExtension}";
             return fileName;
-        }        
+        }
+
+        /// <summary>
+        /// Creates a file-name from a file-name without extension, file-extension, using the <see cref="FileExtensionSeparator.Default"/> file-extension separator.
+        /// </summary>
+        public static string GetFileName(string fileNameWithoutExtension, string fileExtension)
+        {
+            var fileName = Utilities.GetFileName(fileNameWithoutExtension, fileExtension, FileExtensionSeparator.Default.Value);
+            return fileName;
+        }
+
+        /// <summary>
+        /// Gets the file-name portion of the provided file-path.
+        /// </summary>
+        public static string GetFileName(string filePath)
+        {
+            var fileName = Utilities.GetFileNameSystem(filePath);
+            return fileName;
+        }
+
+        public static string GetFileNameWithoutExtension(string filePath)
+        {
+            var fileNameWithoutExtension = Utilities.GetFileNameWithoutExtensionSystem(filePath);
+            return fileNameWithoutExtension;
+        }
 
         #endregion
 
@@ -536,6 +563,12 @@ namespace R5T.NetStandard.IO.Paths
             return fileName;
         }
 
+        public static FileName GetFileName(FilePath filePath)
+        {
+            var fileName = Utilities.GetFileName(filePath.Value).AsFileName();
+            return fileName;
+        }
+
         /// <summary>
         /// Combines <see cref="FileNameSegment"/>s into a <see cref="FileNameWithoutExtension"/> using the specified <see cref="FileNameSegmentSeparator"/>.
         /// </summary>
@@ -554,6 +587,24 @@ namespace R5T.NetStandard.IO.Paths
         public static FileNameWithoutExtension GetFileNameWithoutExtension(params FileNameSegment[] fileNameSegments)
         {
             var fileNameWithoutExtension = Utilities.GetFileNameWithoutExtension(FileNameSegmentSeparator.Default, fileNameSegments);
+            return fileNameWithoutExtension;
+        }
+
+        /// <summary>
+        /// Gets the <see cref="FileNameWithoutExtension"/> component of a <see cref="FilePath"/> (e.g. "temp" in "C:\Temp\temp.txt").
+        /// </summary>
+        public static FileNameWithoutExtension GetFileNameWithoutExtension(FilePath filePath)
+        {
+            var fileNameWithoutExtension = Utilities.GetFileNameWithoutExtension(filePath.Value).AsFileNameWithoutExtension();
+            return fileNameWithoutExtension;
+        }
+
+        /// <summary>
+        /// Gets the <see cref="FileNameWithoutExtension"/> component of a <see cref="FileName"/> (e.g. "temp" from "temp.txt").
+        /// </summary>
+        public static FileNameWithoutExtension GetFileNameWithoutExtension(FileName fileName)
+        {
+            var fileNameWithoutExtension = Utilities.GetFileNameWithoutExtensionSystem(fileName.Value).AsFileNameWithoutExtension(); // Note, ok to use System string-based method on file-name, since it works for the full file-path it will work for the file-name.
             return fileNameWithoutExtension;
         }
 
@@ -595,6 +646,8 @@ namespace R5T.NetStandard.IO.Paths
         }
 
         #endregion
+
+        #region Directory and File Paths
 
         /// <summary>
         /// Combines <see cref="PathSegment"/>s using the specified directory path separator..
@@ -645,8 +698,6 @@ namespace R5T.NetStandard.IO.Paths
         //    var directoryRelativePath = Utilities.Combine(platform, directoryPathSegments as PathSegment[]).AsDirectoryRelativePath();
         //    return directoryRelativePath;
         //}
-
-        #region Directory and File Paths
 
         public static AbsolutePath Combine(DirectorySeparator directorySeparator, AbsolutePath absolutePath, PathSegment pathSegment)
         {
