@@ -7,7 +7,7 @@ namespace R5T.NetStandard.IO.Paths.Extensions
     {
         public static AbsolutePath AsAbsolutePath(this string value)
         {
-            var absolutePath = new GenericAbsolutePath(value);
+            var absolutePath = new GeneralAbsolutePath(value);
             return absolutePath;
         }
 
@@ -19,7 +19,7 @@ namespace R5T.NetStandard.IO.Paths.Extensions
 
         public static DirectoryNameSegment AsDirectoryNameSegment(this string value)
         {
-            var directoryNameSegment = new GenericDirectoryNameSegment(value);
+            var directoryNameSegment = new GeneralDirectoryNameSegment(value);
             return directoryNameSegment;
         }
 
@@ -49,7 +49,7 @@ namespace R5T.NetStandard.IO.Paths.Extensions
 
         public static FileNameSegment AsFileNameSegment(this string value)
         {
-            var fileNameSegment = new GenericFileNameSegment(value);
+            var fileNameSegment = new GeneralFileNameSegment(value);
             return fileNameSegment;
         }
 
@@ -73,7 +73,7 @@ namespace R5T.NetStandard.IO.Paths.Extensions
 
         public static PathSegment AsPathSegment(this string value)
         {
-            var pathSegment = new GenericPathSegment(value);
+            var pathSegment = new GeneralPathSegment(value);
             return pathSegment;
         }
 

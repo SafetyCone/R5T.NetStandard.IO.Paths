@@ -10,9 +10,9 @@ namespace R5T.NetStandard.IO.Paths
     /// <remarks>
     /// The class is sealed. To create your own path segment type, derive from <see cref="PathSegment"/>.
     /// </remarks>
-    public class GenericPathSegment : PathSegment
+    public class GeneralPathSegment : PathSegment
     {
-        public GenericPathSegment(string value)
+        public GeneralPathSegment(string value)
             : base(value)
         {
         }

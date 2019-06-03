@@ -10,9 +10,9 @@ namespace R5T.NetStandard.IO.Paths
     /// <remarks>
     /// The class is sealed. To create your own directory name segment type, derive from <see cref="DirectoryNameSegment"/>.
     /// </remarks>
-    public sealed class GenericDirectoryNameSegment : DirectoryNameSegment
+    public sealed class GeneralDirectoryNameSegment : DirectoryNameSegment
     {
-        public GenericDirectoryNameSegment(string value)
+        public GeneralDirectoryNameSegment(string value)
             : base(value)
         {
         }

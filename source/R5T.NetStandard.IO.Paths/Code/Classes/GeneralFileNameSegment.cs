@@ -10,9 +10,9 @@ namespace R5T.NetStandard.IO.Paths
     /// <remarks>
     /// The class is sealed. To create your own file name segment type, derive from <see cref="FileNameSegment"/>.
     /// </remarks>
-    public sealed class GenericFileNameSegment : FileNameSegment
+    public sealed class GeneralFileNameSegment : FileNameSegment
     {
-        public GenericFileNameSegment(string value)
+        public GeneralFileNameSegment(string value)
             : base(value)
         {
         }

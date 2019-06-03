@@ -507,25 +507,25 @@ namespace R5T.NetStandard.IO.Paths
         #region File-name.
 
         /// <summary>
-        /// Combines multiple <see cref="FileNameSegment"/>s into a single <see cref="GenericFileNameSegment"/>.
+        /// Combines multiple <see cref="FileNameSegment"/>s into a single <see cref="GeneralFileNameSegment"/>.
         /// </summary>
         /// <remarks>
         /// Without knowing the context of use, there is now way to know the type of the combined <see cref="FileNameSegment"/>s.
-        /// But, depending on context, the <see cref="GenericFileNameSegment"/> can be converted into the proper file-name type.
+        /// But, depending on context, the <see cref="GeneralFileNameSegment"/> can be converted into the proper file-name type.
         /// </remarks>
-        public static GenericFileNameSegment Combine(FileNameSegmentSeparator fileNameSegmentSeparator, params FileNameSegment[] fileNameSegments)
+        public static GeneralFileNameSegment Combine(FileNameSegmentSeparator fileNameSegmentSeparator, params FileNameSegment[] fileNameSegments)
         {
             var fileNameSegmentValue = fileNameSegments.Join(fileNameSegmentSeparator.Value);
 
-            var fileNameSegment = new GenericFileNameSegment(fileNameSegmentValue);
+            var fileNameSegment = new GeneralFileNameSegment(fileNameSegmentValue);
             return fileNameSegment;
         }
 
         /// <summary>
-        /// Combines multiple <see cref="FileNameSegment"/>s into a single <see cref="GenericFileNameSegment"/>.
+        /// Combines multiple <see cref="FileNameSegment"/>s into a single <see cref="GeneralFileNameSegment"/>.
         /// Uses the <see cref="FileNameSegmentSeparator.Default"/> value.
         /// </summary>
-        public static GenericFileNameSegment Combine(params FileNameSegment[] fileNameSegments)
+        public static GeneralFileNameSegment Combine(params FileNameSegment[] fileNameSegments)
         {
             var fileNameSegment = Utilities.Combine(FileNameSegmentSeparator.Default, fileNameSegments);
             return fileNameSegment;
@@ -621,19 +621,19 @@ namespace R5T.NetStandard.IO.Paths
         #region Directory-name.
 
         /// <summary>
-        /// Combines multiple <see cref="DirectoryNameSegment"/>s into a single <see cref="GenericDirectoryNameSegment"/>.
+        /// Combines multiple <see cref="DirectoryNameSegment"/>s into a single <see cref="GeneralDirectoryNameSegment"/>.
         /// Without knowing the context of use, there is now way to know the type of the combined <see cref="DirectoryNameSegment"/>s.
-        /// But, depending on context, the <see cref="GenericDirectoryNameSegment"/> can be converted into the proper directory-name type.
+        /// But, depending on context, the <see cref="GeneralDirectoryNameSegment"/> can be converted into the proper directory-name type.
         /// </summary>
-        public static GenericDirectoryNameSegment Combine(DirectoryNameSegmentSeparator directoryNameSegmentSeparator, params DirectoryNameSegment[] directoryNameSegments)
+        public static GeneralDirectoryNameSegment Combine(DirectoryNameSegmentSeparator directoryNameSegmentSeparator, params DirectoryNameSegment[] directoryNameSegments)
         {
             var directoryNameSegmentValue = directoryNameSegments.Join(directoryNameSegmentSeparator.Value);
 
-            var directoryNameSegment = new GenericDirectoryNameSegment(directoryNameSegmentValue);
+            var directoryNameSegment = new GeneralDirectoryNameSegment(directoryNameSegmentValue);
             return directoryNameSegment;
         }
 
-        public static GenericDirectoryNameSegment Combine(params DirectoryNameSegment[] directoryNameSegments)
+        public static GeneralDirectoryNameSegment Combine(params DirectoryNameSegment[] directoryNameSegments)
         {
             var directoryNameSegment = Utilities.Combine(DirectoryNameSegmentSeparator.Default, directoryNameSegments);
             return directoryNameSegment;

@@ -10,9 +10,9 @@ namespace R5T.NetStandard.IO.Paths
     /// <remarks>
     /// The class is sealed. To create your own absolute path type, derive from <see cref="AbsolutePath"/>.
     /// </remarks>
-    public sealed class GenericAbsolutePath : AbsolutePath
+    public sealed class GeneralAbsolutePath : AbsolutePath
     {
-        public GenericAbsolutePath(string value)
+        public GeneralAbsolutePath(string value)
             : base(value)
         {
         }

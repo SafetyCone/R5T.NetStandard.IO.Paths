@@ -5,6 +5,9 @@ using R5T.NetStandard.OS;
 
 namespace R5T.NetStandard.IO.Paths
 {
+    /// <summary>
+    /// Separates <see cref="PathSegment"/>s (usually directory names and the file name) in a path.
+    /// </summary>
     public class DirectorySeparator : TypedString
     {
         #region Static
