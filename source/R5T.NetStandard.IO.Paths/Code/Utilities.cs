@@ -16,12 +16,12 @@ namespace R5T.NetStandard.IO.Paths
     /// </summary>
     public static class Utilities
     {
-        #region Separators.
+        #region Separators
 
         /// <summary>
         /// Get the directory separator used on the current platform (the Windows separator on Windows platforms, the non-Windows separator on non-Windows platforms).
         /// </summary>
-        public static string PlatformDirectorySeparator
+        public static string PlatformDirectorySeparatorValue
         {
             get
             {
@@ -36,11 +36,11 @@ namespace R5T.NetStandard.IO.Paths
         /// <summary>
         /// Gets the directory separator used on alternate platforms (the non-Windows separator on Windows platforms, the Windows separator on non-Windows platforms).
         /// </summary>
-        public static string PlatformDirectorySeparatorAlternate
+        public static string PlatformDirectorySeparatorValueAlternate
         {
             get
             {
-                var output = Utilities.GetAlternateDirectorySeparator(Utilities.PlatformDirectorySeparator);
+                var output = Utilities.GetAlternateDirectorySeparator(Utilities.PlatformDirectorySeparatorValue);
                 return output;
             }
         }
@@ -66,6 +66,14 @@ namespace R5T.NetStandard.IO.Paths
         {
             var directorySeparator = DirectorySeparator.GetDefaultForPlatform(platform);
             return directorySeparator;
+        }
+
+        public static DirectorySeparator GetAlternateDirectorySeparator(Platform platform)
+        {
+            var alternatePlatform = platform.GetAlternatePlatform();
+
+            var alternateDirectorySeparator = Utilities.GetDirectorySeparator(alternatePlatform);
+            return alternateDirectorySeparator;
         }
 
         public static string GetDirectorySeparatorValue(Platform platform)
@@ -100,7 +108,7 @@ namespace R5T.NetStandard.IO.Paths
 
         #endregion
 
-        #region System.IO.Path Wrappers.
+        #region System.IO.Path Wrappers
 
         /// <summary>
         /// Returns the <see cref="Path.AltDirectorySeparatorChar"/> value.
@@ -361,7 +369,62 @@ namespace R5T.NetStandard.IO.Paths
 
         #endregion
 
-        #region Paths as strings.
+        #region Paths as strings
+
+        #region Separators
+
+        /// <summary>
+        /// Ensures that the output path uses the specified path separator.
+        /// </summary>
+        public static string EnsureDirectorySeparator(string path, string directorySeparator)
+        {
+            var alternateDirectorySeparator = Utilities.GetAlternateDirectorySeparator(directorySeparator);
+
+            var output = path.Replace(alternateDirectorySeparator, directorySeparator);
+            return output;
+        }
+
+        /// <summary>
+        /// Ensures that the output path uses the specified path separator.
+        /// </summary>
+        public static string EnsureDirectorySeparator(string path, Platform platform)
+        {
+            var directorySeparatorValue = Utilities.GetDirectorySeparatorValue(platform);
+
+            var output = Utilities.EnsureDirectorySeparator(path, directorySeparatorValue);
+            return output;
+        }
+
+        /// <summary>
+        /// Ensures that the output path uses the current platform directory separator.
+        /// </summary>
+        public static string EnsureDirectorySeparator(string path)
+        {
+            var directorySeparatorValue = Utilities.PlatformDirectorySeparatorValue;
+
+            var output = Utilities.EnsureDirectorySeparator(path, directorySeparatorValue);
+            return output;
+        }
+
+        /// <summary>
+        /// Replaces all <see cref="Utilities.DefaultWindowsDirectorySeparator"/> with <see cref="Utilities.DefaultNonWindowsDirectorySeparator"/>.
+        /// </summary>
+        public static string EnsureWindowsDirectorySeparator(string path)
+        {
+            var output = Utilities.EnsureDirectorySeparator(path, Constants.DefaultWindowsDirectorySeparator);
+            return output;
+        }
+
+        /// <summary>
+        /// Replaces all <see cref="Utilities.DefaultNonWindowsDirectorySeparator"/> with <see cref="Utilities.DefaultWindowsDirectorySeparator"/>.
+        /// </summary>
+        public static string EnsureNonWindowsDirectorySeparator(string path)
+        {
+            var output = Utilities.EnsureDirectorySeparator(path, Constants.DefaultNonWindowsDirectorySeparator);
+            return output;
+        }
+
+        #endregion
 
         /// <summary>
         /// Given an unresolved path (ex: "C:\Temp1\Temp2\..\Temp3\Temp4.txt"), get a resolved path (ex: "C:\Temp1\Temp3\Temp4.txt").
@@ -439,7 +502,7 @@ namespace R5T.NetStandard.IO.Paths
         /// </summary>
         public static string Combine(params string[] pathSegments)
         {
-            var pathSeparator = Utilities.PlatformDirectorySeparator;
+            var pathSeparator = Utilities.PlatformDirectorySeparatorValue;
 
             var output = Utilities.CombineUsingDirectorySeparator(pathSeparator, pathSegments);
             return output;
@@ -504,7 +567,13 @@ namespace R5T.NetStandard.IO.Paths
 
         #region Strongly-typed paths.
 
-        #region File-name.
+        #region Separators
+
+
+
+        #endregion
+
+        #region File-Name
 
         /// <summary>
         /// Combines multiple <see cref="FileNameSegment"/>s into a single <see cref="GeneralFileNameSegment"/>.
@@ -618,7 +687,7 @@ namespace R5T.NetStandard.IO.Paths
 
         #endregion
 
-        #region Directory-name.
+        #region Directory-Name
 
         /// <summary>
         /// Combines multiple <see cref="DirectoryNameSegment"/>s into a single <see cref="GeneralDirectoryNameSegment"/>.

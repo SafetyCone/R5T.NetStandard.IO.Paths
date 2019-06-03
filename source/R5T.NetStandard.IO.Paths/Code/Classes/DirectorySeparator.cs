@@ -15,11 +15,11 @@ namespace R5T.NetStandard.IO.Paths
         /// <summary>
         /// Separates directory path segments in Windows-style paths.
         /// </summary>
-        public static readonly DirectorySeparator WindowsDefault = new DirectorySeparator(Constants.DefaultWindowsDirectorySeparator);
+        public static readonly DirectorySeparator DefaultWindows = new DirectorySeparator(Constants.DefaultWindowsDirectorySeparator);
         /// <summary>
         /// Separates directory path segments in non-Windows-style paths.
         /// </summary>
-        public static readonly DirectorySeparator NonWindowsDefault = new DirectorySeparator(Constants.DefaultNonWindowsDirectorySeparator);
+        public static readonly DirectorySeparator DefaultNonWindows = new DirectorySeparator(Constants.DefaultNonWindowsDirectorySeparator);
         /// <summary>
         /// Provides the default directory separator on the currently executing platform.
         /// </summary>
@@ -31,10 +31,10 @@ namespace R5T.NetStandard.IO.Paths
             switch(platform)
             {
                 case Platform.NonWindows:
-                    return DirectorySeparator.NonWindowsDefault;
+                    return DirectorySeparator.DefaultNonWindows;
 
                 case Platform.Windows:
-                    return DirectorySeparator.WindowsDefault;
+                    return DirectorySeparator.DefaultWindows;
 
                 default:
                     var message = EnumHelper.GetUnexpectedEnumerationValueMessage(platform);

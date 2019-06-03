@@ -43,7 +43,7 @@ namespace R5T.NetStandard.IO.Paths
         /// <summary>
         /// Provides the default directory separator on the currently executing platform.
         /// </summary>
-        public static readonly string DefaultDirectorySeparator = Utilities.PlatformDirectorySeparator;
+        public static readonly string DefaultDirectorySeparator = Utilities.PlatformDirectorySeparatorValue;
 
         public static readonly char DefaultVolumeSeparatorChar = Path.VolumeSeparatorChar; // ':' as in "C:\..."
         /// <summary>
