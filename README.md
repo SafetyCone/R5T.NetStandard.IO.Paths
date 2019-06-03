@@ -45,7 +45,7 @@ Paths are made of path-segments separated by directory-separators. Path segments
 Directory-names and file-names can themselves be composed of segments. For example, directory-names like "Documents-NEW" and "Documents-OLD" obviously communicate information in their segments, separated by a '-' separator. File-names are more obviously composed of segments; "temp.txt" includes the file-name without extension "temp" and the file-extension "txt" separated by the file-extension separator '.'.
 
 ### Path Types
-All path-types derive from [`TypedString`](https://github.com/MinexAutomation/R5T.NetStandard.Types/wiki/TypedString), which allows strong-typing of "stringly"-typed data.
+All path-types derive from [TypedString], which allows strong-typing of "stringly"-typed data.
 
 The inheritance hierarchy of path-types starts with the base-types:
 
@@ -82,7 +82,7 @@ The list of path-types is:
 * `PathSeparator` - Separates paths in a path aggregation (like the PATH environment variable). For example, ';' in "path1;path2;path3". Note that this *NOT* the directory-separator even though the directory-separator is colloquially called the path-separator. The path-separator separates paths.
 
 ### Name Segment Types
-Directory-names and file-names can be composed of segments that can be combined to get a directory-name or file-name. Name segments begin with two types that inherit from [`TypedString`](https://github.com/MinexAutomation/R5T.NetStandard.Types/wiki/TypedString):
+Directory-names and file-names can be composed of segments that can be combined to get a directory-name or file-name. Name segments begin with two types that inherit from [`TypedString`]:
 
 * `DirectoryNameSegment`
 * `FileNameSegment`
@@ -151,3 +151,6 @@ Now it's perfectly clear which method to choose and in fact, the compiler will p
 
 ### Resolve
 Path resolution takes any relative-path directory-names (like '.' or '..') in the path and resolves them to the actual directory path.
+
+
+   [TypedString]: <https://github.com/MinexAutomation/R5T.NetStandard.Types/wiki/TypedString>
