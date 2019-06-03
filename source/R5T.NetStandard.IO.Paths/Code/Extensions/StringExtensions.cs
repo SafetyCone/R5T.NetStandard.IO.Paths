@@ -76,5 +76,11 @@ namespace R5T.NetStandard.IO.Paths.Extensions
             var pathSegment = new GenericPathSegment(value);
             return pathSegment;
         }
+
+        public static Root AsRoot(this string value)
+        {
+            var root = new Root(value);
+            return root;
+        }
     }
 }
