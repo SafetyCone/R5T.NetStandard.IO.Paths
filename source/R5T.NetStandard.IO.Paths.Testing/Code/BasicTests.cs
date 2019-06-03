@@ -11,7 +11,21 @@ namespace R5T.NetStandard.IO.Paths.Testing
     public class BasicTests
     {
         [TestMethod]
-        public static void DirectoryNameFromDirectoryNameSegments()
+        public void CreateDropboxDirectoryPath()
+        {
+            var dropboxWindowsRootDirectoryPath = @"C:\Users\User\Dropbox".AsDirectoryPath();
+            var organizationsDirectoryName = "Organizations".AsDirectoryName();
+            var organizationDirectoryName = "Rivet".AsDirectoryName();
+            var dataDirectoryName = "Data".AsDirectoryName();
+            var expected = @"C:\Users\User\Dropbox\Organizations\Rivet\Data";
+
+            var directoryPath = PathUtilities.Combine(dropboxWindowsRootDirectoryPath, organizationsDirectoryName, organizationDirectoryName, dataDirectoryName);
+
+            Assert.AreEqual(expected, directoryPath.Value);
+        }
+
+        [TestMethod]
+        public void DirectoryNameFromDirectoryNameSegments()
         {
             var projectNameDirectoryNameSegment = "R5T.NetStandard.IO.Paths".AsDirectoryNameSegment();
             var constructionDirectoryNameSegment = "Construction".AsDirectoryNameSegment();

@@ -368,11 +368,19 @@ namespace R5T.NetStandard.IO.Paths
         /// </summary>
         public static string ResolvePath(string unresolvedPath)
         {
-            var unresolvedUri = new Uri(unresolvedPath);
-            var localPathUri = unresolvedUri.LocalPath;
+            try
+            {
+                var unresolvedUri = new Uri(unresolvedPath);
+                var localPathUri = unresolvedUri.LocalPath;
 
-            var output = Path.GetFullPath(localPathUri);
-            return output;
+                var output = Path.GetFullPath(localPathUri);
+                return output;
+            }
+            catch (UriFormatException uriFormatException)
+            {
+                var message = $"Failed to resolve path: {unresolvedPath}";
+                throw new ArgumentException(message, nameof(unresolvedPath), uriFormatException);
+            }
         }
 
         /// <summary>
@@ -381,7 +389,7 @@ namespace R5T.NetStandard.IO.Paths
         /// * All segments except the first are trimmed of starting path segments.
         /// * All segments have platform-alternate path separators replaced with platform path separators.
         /// </summary>
-        public static string CombineUsingDirectorySeparatorNoResolution(string directorySeparator, params string[] pathSegments)
+        public static string CombineUsingDirectorySeparatorWithoutResolution(string directorySeparator, params string[] pathSegments)
         {
             var directorySeparatorAlternate = Utilities.GetAlternateDirectorySeparator(directorySeparator);
 
@@ -417,11 +425,11 @@ namespace R5T.NetStandard.IO.Paths
 
         /// <summary>
         /// Combines path segments using the specified directory separator, and resolves the combined path.
-        /// To get an unresolved path, use <see cref="Utilities.CombineUsingDirectorySeparatorNoResolution(string, string[])"/>.
+        /// To get an unresolved path, use <see cref="Utilities.CombineUsingDirectorySeparatorWithoutResolution(string, string[])"/>.
         /// </summary>
         public static string CombineUsingDirectorySeparator(string directorySeparator, params string[] pathSegments)
         {
-            var unresolvedCombinedPathSegment = Utilities.CombineUsingDirectorySeparatorNoResolution(directorySeparator, pathSegments);
+            var unresolvedCombinedPathSegment = Utilities.CombineUsingDirectorySeparatorWithoutResolution(directorySeparator, pathSegments);
             var combinedPathSegment = Utilities.ResolvePath(unresolvedCombinedPathSegment);
             return combinedPathSegment;
         }
@@ -650,17 +658,20 @@ namespace R5T.NetStandard.IO.Paths
         #region Directory and File Paths
 
         /// <summary>
-        /// Combines <see cref="PathSegment"/>s using the specified directory path separator..
+        /// Combines <see cref="PathSegment"/>s using the specified directory path separator.
+        /// Note, no path resolution is performed on the path segments.
+        /// </summary>
+        /// <remarks>
         /// An array of <see cref="PathSegment"/>s can only be combined into a <see cref="PathSegment"/>.
         /// Depending on context, a <see cref="PathSegment"/> could be converted to the proper type, for example a <see cref="DirectoryPath"/> or <see cref="FilePath"/>.
-        /// </summary>
+        /// </remarks>
         public static PathSegment Combine(DirectorySeparator directorySeparator, params PathSegment[] pathSegments)
         {
             var pathSegmentValues = pathSegments.Select(x => x.Value).ToArray();
 
             var directorySeparatorValue = directorySeparator.Value;
 
-            var combinedValue = Utilities.CombineUsingDirectorySeparator(directorySeparatorValue, pathSegmentValues);
+            var combinedValue = Utilities.CombineUsingDirectorySeparatorWithoutResolution(directorySeparatorValue, pathSegmentValues);
 
             var pathSegment = combinedValue.AsPathSegment();
             return pathSegment;

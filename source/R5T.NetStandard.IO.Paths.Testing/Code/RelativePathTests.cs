@@ -5,7 +5,7 @@ using R5T.NetStandard.IO.Paths.Extensions;
 using PathUtilities = R5T.NetStandard.IO.Paths.Utilities;
 
 
-namespace R5T.NetStandard.IO.Paths.Testing.Code
+namespace R5T.NetStandard.IO.Paths.Testing
 {
     [TestClass]
     public class RelativePathTests
