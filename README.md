@@ -38,6 +38,17 @@ Finally, path segments can include things like the current directory name ('.'),
 
 	[absolute path]{optional, {directory separator} relative path to a directory}
 	[absolute path]{optional, {directory separator} relative path to a file}
+	
+### Strongly-Typed Path-Types
+Strong-typing instead of "string"-typing of path-types vastly simplifies naming path manipulation operations. For example, since we can't have both of these method overloads, which should be renamed?
+
+    string GetDirectoryName(string directoryPath);
+    string GetDirectoryName(string filePath);
+    
+Both are genuinely useful, and both are the same operation of getting the directory-name for a path. But method overloading rules mean they both can't have the same name. The problem here is that the input arguments are really of different types. Making this explicit resolved the difficulty:
+
+    string GetDirectoryName(DirectoryPath directoryPath);
+    string GetDirectoryName(FilePath filePath);
 
 ### Segments and Separators
 Paths are made of path-segments separated by directory-separators. Path segments include roots (ex: /mnt, C:, E:), directory-names, and file-names.
