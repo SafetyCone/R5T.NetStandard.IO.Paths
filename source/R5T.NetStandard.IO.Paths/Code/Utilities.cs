@@ -408,7 +408,7 @@ namespace R5T.NetStandard.IO.Paths
         }
 
         /// <summary>
-        /// Replaces all <see cref="Utilities.DefaultWindowsDirectorySeparator"/> with <see cref="Utilities.DefaultNonWindowsDirectorySeparator"/>.
+        /// Replaces all instances of <see cref="Constants.DefaultNonWindowsDirectorySeparator"/> with <see cref="Constants.DefaultWindowsDirectorySeparator"/>.
         /// </summary>
         public static string EnsureWindowsDirectorySeparator(string path)
         {
@@ -417,7 +417,7 @@ namespace R5T.NetStandard.IO.Paths
         }
 
         /// <summary>
-        /// Replaces all <see cref="Utilities.DefaultNonWindowsDirectorySeparator"/> with <see cref="Utilities.DefaultWindowsDirectorySeparator"/>.
+        /// Replaces all <see cref="Constants.DefaultWindowsDirectorySeparator"/> with <see cref="Constants.DefaultNonWindowsDirectorySeparator"/>.
         /// </summary>
         public static string EnsureNonWindowsDirectorySeparator(string path)
         {
