@@ -583,6 +583,14 @@ namespace R5T.NetStandard.IO.Paths
             return directoryName;
         }
 
+        public static string GetParentDirectoryPath(string directoryPath)
+        {
+            var directoryInfo = new DirectoryInfo(directoryPath);
+
+            var parentDirectoryPath = directoryInfo.Parent.FullName;
+            return parentDirectoryPath;
+        }
+
         #endregion
 
         #region Strongly-typed paths.
@@ -961,6 +969,12 @@ namespace R5T.NetStandard.IO.Paths
         {
             var directoryPath = Utilities.GetDirectoryPath(filePath.Value).AsDirectoryPath();
             return directoryPath;
+        }
+
+        public static DirectoryPath GetParentDirectoryPath(DirectoryPath directoryPath)
+        {
+            var parentDirectoryPath = Utilities.GetParentDirectoryPath(directoryPath.Value).AsDirectoryPath();
+            return parentDirectoryPath;
         }
 
         public static AbsolutePath ResolvePath(AbsolutePath unresolvedAbsolutePath)
