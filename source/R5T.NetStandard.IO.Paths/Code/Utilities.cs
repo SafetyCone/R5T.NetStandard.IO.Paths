@@ -172,6 +172,7 @@ namespace R5T.NetStandard.IO.Paths
 
         /// <summary>
         /// Wraps <see cref="Path.GetDirectoryName(string)"/>. Returns full directory path.
+        /// This System method is mis-named. It should be GetDirectoryPath().
         /// Example: (@"C:\temp\temp.txt") -> "C:\temp".
         /// The returned string will use the executing platform path separator, and if a directory path is given (path ends with a directory separator), the returned path with lack the path separator. 
         /// </summary>
@@ -181,7 +182,7 @@ namespace R5T.NetStandard.IO.Paths
         /// Example: (@"/mnt/efs/temp.txt") -> "\mnt\efs" (on Windows).
         /// Example: (@"/mnt/efs/temp/") -> "\mnt\efs\temp" (on Windows).
         /// </remarks>
-        public static string GetDirectoyNameSystem(string path)
+        public static string GetDirectoryNameSystem(string path)
         {
             var output = Path.GetDirectoryName(path);
             return output;
@@ -570,6 +571,18 @@ namespace R5T.NetStandard.IO.Paths
             return directoryPath;
         }
 
+        /// <summary>
+        /// Gets the name of the directory of the given directory-path.
+        /// This behavior differs from <see cref="Utilities.GetDirectoryNameSystem(string)"/>, which misleadingly gives the full directory-path.
+        /// </summary>
+        public static string GetDirectoryName(string directoryPath)
+        {
+            var directoryInfo = new DirectoryInfo(directoryPath);
+
+            var directoryName = directoryInfo.Name;
+            return directoryName;
+        }
+
         #endregion
 
         #region Strongly-typed paths.
@@ -906,6 +919,20 @@ namespace R5T.NetStandard.IO.Paths
 
             var filePath = Utilities.GetFilePath(directorySeparator, absolutePath, pathSegments);
             return filePath;
+        }
+
+        public static DirectoryName GetDirectoryName(DirectoryPath directoryPath)
+        {
+            var directoryName = Utilities.GetDirectoryName(directoryPath.Value).AsDirectoryName();
+            return directoryName;
+        }
+
+        public static DirectoryName GetDirectoryName(FilePath filePath)
+        {
+            var directoryPath = Utilities.GetDirectoryPath(filePath);
+
+            var directoryName = Utilities.GetDirectoryName(directoryPath);
+            return directoryName;
         }
 
         public static DirectoryPath GetDirectoryPath(DirectorySeparator directorySeparator, AbsolutePath absolutePath, params PathSegment[] pathSegments)
