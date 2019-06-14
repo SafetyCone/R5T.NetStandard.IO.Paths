@@ -37,7 +37,7 @@ namespace R5T.NetStandard.IO.Paths
                     return DirectorySeparator.DefaultWindows;
 
                 default:
-                    var message = EnumHelper.GetUnexpectedEnumerationValueMessage(platform);
+                    var message = EnumHelper.UnexpectedEnumerationValueMessage(platform);
                     throw new ArgumentException(message);
             }
         }

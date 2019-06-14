@@ -30,7 +30,7 @@ namespace R5T.NetStandard.IO.Paths
                 string osx() => Constants.DefaultNonWindowsDirectorySeparator;
                 string linux() => Constants.DefaultNonWindowsDirectorySeparator;
 
-                var output = OsHelper.PlatformSwitch(windows, osx, linux);
+                var output = OSHelper.OSPlatformSwitch(windows, osx, linux);
                 return output;
             }
         }
@@ -71,7 +71,7 @@ namespace R5T.NetStandard.IO.Paths
 
         public static DirectorySeparator GetAlternateDirectorySeparator(Platform platform)
         {
-            var alternatePlatform = platform.GetAlternatePlatform();
+            var alternatePlatform = platform.AlternatePlatform();
 
             var alternateDirectorySeparator = Utilities.GetDirectorySeparator(alternatePlatform);
             return alternateDirectorySeparator;
