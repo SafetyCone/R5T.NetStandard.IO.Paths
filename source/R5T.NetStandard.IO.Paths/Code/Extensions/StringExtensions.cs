@@ -82,5 +82,11 @@ namespace R5T.NetStandard.IO.Paths.Extensions
             var root = new Root(value);
             return root;
         }
+
+        public static SearchPattern AsSearchPattern(this string value)
+        {
+            var searchPattern = new SearchPattern(value);
+            return searchPattern;
+        }
     }
 }
