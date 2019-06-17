@@ -428,6 +428,23 @@ namespace R5T.NetStandard.IO.Paths
 
         #endregion
 
+        public static string CombineFileName(string fileNameSegment1, string fileNameSegment2)
+        {
+            var fileNameSegment = $"{fileNameSegment1}{Constants.DefaultFileNameSegmentSeparator}{fileNameSegment2}";
+            return fileNameSegment;
+        }
+
+        public static string GetRelativePath(string fromPath, string toPath)
+        {
+            var fromUri = new Uri(fromPath);
+            var toUri = new Uri(toPath);
+
+            var relativeUri = fromUri.MakeRelativeUri(toUri);
+
+            var relativePath = Uri.UnescapeDataString(relativeUri.ToString());
+            return relativePath;
+        }
+
         /// <summary>
         /// Given an unresolved path (ex: "C:\Temp1\Temp2\..\Temp3\Temp4.txt"), get a resolved path (ex: "C:\Temp1\Temp3\Temp4.txt").
         /// </summary>
@@ -594,6 +611,26 @@ namespace R5T.NetStandard.IO.Paths
         #endregion
 
         #region Strongly-typed paths.
+
+        #region Current Directory
+
+        public static DirectoryPath CurrentDirectoryPath
+        {
+            get
+            {
+                var output = Environment.CurrentDirectory.AsDirectoryPath();
+                return output;
+            }
+        }
+
+
+        public static FilePath RelativeToCurrentDirectory(FileName fileName)
+        {
+            var filePath = Utilities.Combine(Utilities.CurrentDirectoryPath, fileName).AsFilePath();
+            return filePath;
+        }
+
+        #endregion
 
         #region Executable Path
 
@@ -927,6 +964,12 @@ namespace R5T.NetStandard.IO.Paths
 
             var filePath = Utilities.GetFilePath(directorySeparator, absolutePath, pathSegments);
             return filePath;
+        }
+
+        public static FileRelativePath GetRelativePath(FilePath fromFilePath, FilePath toFilePath)
+        {
+            var fileRelativePath = Utilities.GetRelativePath(fromFilePath.Value, toFilePath.Value).AsFileRelativePath();
+            return fileRelativePath;
         }
 
         public static DirectoryName GetDirectoryName(DirectoryPath directoryPath)

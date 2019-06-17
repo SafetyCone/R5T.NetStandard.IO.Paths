@@ -70,5 +70,11 @@ namespace R5T.NetStandard.IO.Paths
             var exists = Directory.Exists(directoryPath.Value);
             return exists;
         }
+
+        public static DirectoryName GetDirectoryName(this DirectoryPath directoryPath)
+        {
+            var directoryName = new DirectoryInfo(directoryPath.Value).Name.AsDirectoryName();
+            return directoryName;
+        }
     }
 }
