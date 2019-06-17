@@ -17,7 +17,23 @@ namespace R5T.NetStandard.IO.Paths.Construction
             //Examples.FileNameFromFileNameWithoutExtensionAndExtension();
             //Examples.FileNameWithoutExtensionFromFileNameSegments();
             //Examples.DirectoryNameFromDirectoryNameSegments();
-            Examples.FilePathFromPathSegments();
+            //Examples.FilePathFromPathSegments();
+            Examples.LinuxStylePathCombine();
+        }
+
+        /// <summary>
+        /// If you have Linux-style paths, see whether they can be combined.
+        /// </summary>
+        public static void LinuxStylePathCombine()
+        {
+            var osxUserRootDirectoryPath = @"/Users/User1".AsDirectoryPath();
+            var tempDirectoryName = "temp".AsDirectoryName();
+
+            var osxUserTempDirectoryPath = PathUtilities.Combine(Platform.NonWindows, osxUserRootDirectoryPath, tempDirectoryName).AsDirectoryPath();
+
+            var describer = ObjectDescriber.Default;
+            var writer = Examples.GetWriter();
+            writer.WriteLine($"OSX User Temp Directory Path: {describer.Describe(osxUserTempDirectoryPath)}");
         }
 
         public static void FilePathFromPathSegments()

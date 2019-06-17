@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using R5T.NetStandard.IO.Paths.Extensions;
+using R5T.NetStandard.OS;
 
 using PathUtilities = R5T.NetStandard.IO.Paths.Utilities;
 
@@ -10,6 +11,30 @@ namespace R5T.NetStandard.IO.Paths.Testing
     [TestClass]
     public class BasicTests
     {
+        [TestMethod]
+        public void LinuxStylePathCombine()
+        {
+            var osxUserRootDirectoryPath = @"/Users/User1".AsDirectoryPath();
+            var tempDirectoryName = "temp".AsDirectoryName();
+            var expected = @"/Users/User1/temp".AsDirectoryPath();
+
+            var tempDirectoryPath = PathUtilities.Combine(Platform.NonWindows, osxUserRootDirectoryPath, tempDirectoryName).AsDirectoryPath();
+
+            Assert.AreEqual(expected.Value, tempDirectoryPath.Value);
+        }
+
+        [TestMethod]
+        public void WindowsStylePathCombine()
+        {
+            var osxUserRootDirectoryPath = @"C:\Users\User1".AsDirectoryPath();
+            var tempDirectoryName = "temp".AsDirectoryName();
+            var expected = @"C:\Users\User1\temp".AsDirectoryPath();
+
+            var tempDirectoryPath = PathUtilities.Combine(Platform.Windows, osxUserRootDirectoryPath, tempDirectoryName).AsDirectoryPath();
+
+            Assert.AreEqual(expected.Value, tempDirectoryPath.Value);
+        }
+
         [TestMethod]
         public void CreateDropboxDirectoryPath()
         {

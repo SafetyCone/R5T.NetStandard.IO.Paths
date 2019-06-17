@@ -452,11 +452,10 @@ namespace R5T.NetStandard.IO.Paths
         {
             try
             {
-                var unresolvedUri = new Uri(unresolvedPath);
-                var localPathUri = unresolvedUri.LocalPath;
+                var unresolvedUri = new Uri(new Uri("file://"), unresolvedPath);
 
-                var output = Path.GetFullPath(localPathUri);
-                return output;
+                var resolvedPath = unresolvedUri.LocalPath;
+                return resolvedPath;
             }
             catch (UriFormatException uriFormatException)
             {

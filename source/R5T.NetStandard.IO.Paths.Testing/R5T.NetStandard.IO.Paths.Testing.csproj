@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\R5T.NetStandard.OS.Types\source\R5T.NetStandard.OS.Types\R5T.NetStandard.OS.Types.csproj" />
     <ProjectReference Include="..\R5T.NetStandard.IO.Paths\R5T.NetStandard.IO.Paths.csproj" />
   </ItemGroup>
 
