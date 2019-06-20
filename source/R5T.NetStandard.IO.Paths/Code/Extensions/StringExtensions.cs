@@ -53,6 +53,12 @@ namespace R5T.NetStandard.IO.Paths.Extensions
             return fileNameSegment;
         }
 
+        public static FileNameSegmentSeparator AsFileNameSegmentSeparator(this string value)
+        {
+            var fileNameSegmentSeparator = new FileNameSegmentSeparator(value);
+            return fileNameSegmentSeparator;
+        }
+
         public static FileNameWithoutExtension AsFileNameWithoutExtension(this string value)
         {
             var fileNameWithoutExtension = new FileNameWithoutExtension(value);
