@@ -11,6 +11,18 @@ namespace R5T.NetStandard.IO.Paths.Testing
     public class RelativePathTests
     {
         [TestMethod]
+        public void FilePathRelativeToFilePath()
+        {
+            var filePath = @"C:\R5T.Code.VisualStudio.Types\R5T.Code.VisualStudio.Types.csproj".AsFilePath();
+            var fileRelativePath = @"..\Temp.txt".AsFileRelativePath();
+            var expected = @"C:\R5T.Code.VisualStudio.Types\Temp.txt";
+
+            var resolvedFilePath = PathUtilities.GetFilePath(filePath, fileRelativePath);
+
+            Assert.AreEqual(expected, resolvedFilePath.Value);
+        }
+
+        [TestMethod]
         public void FilePathFromDirectoryAndRelativeFilePath()
         {
             var directoryPath = @"C:\Temp1\Temp2\Temp3".AsDirectoryPath();

@@ -18,7 +18,24 @@ namespace R5T.NetStandard.IO.Paths.Construction
             //Examples.FileNameWithoutExtensionFromFileNameSegments();
             //Examples.DirectoryNameFromDirectoryNameSegments();
             //Examples.FilePathFromPathSegments();
-            Examples.LinuxStylePathCombine();
+            //Examples.LinuxStylePathCombine();
+            Examples.FilePathRelativeToFilePath();
+        }
+
+        /// <summary>
+        /// Shows that the relative file path "..\" (parent directory) relative to a file-path is the file-path's directory-path.
+        /// Example: C:\R5T.Code.VisualStudio.Types\R5T.Code.VisualStudio.Types.csproj + ..\Temp.txt = C:\R5T.Code.VisualStudio.Types\Temp.txt
+        /// </summary>
+        public static void FilePathRelativeToFilePath()
+        {
+            var filePath = @"C:\R5T.Code.VisualStudio.Types\R5T.Code.VisualStudio.Types.csproj".AsFilePath();
+            var fileRelativePath = @"..\Temp.txt".AsFileRelativePath();
+
+            var resolvedFilePath = PathUtilities.GetFilePath(filePath, fileRelativePath);
+
+            var describer = ObjectDescriber.Default;
+            var writer = Examples.GetWriter();
+            writer.WriteLine($"OSX User Temp Directory Path: {describer.Describe(resolvedFilePath)}"); // Result: C:\R5T.Code.VisualStudio.Types\Temp.txt
         }
 
         /// <summary>
