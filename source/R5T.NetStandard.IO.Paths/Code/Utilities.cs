@@ -842,6 +842,18 @@ namespace R5T.NetStandard.IO.Paths
 
         #region Directory and File Paths
 
+        public static bool Exists(FilePath filePath)
+        {
+            var output = File.Exists(filePath.Value);
+            return output;
+        }
+
+        public static bool Exists(DirectoryPath directoryPath)
+        {
+            var output = File.Exists(directoryPath.Value);
+            return output;
+        }
+
         /// <summary>
         /// Combines <see cref="PathSegment"/>s using the specified directory path separator.
         /// Note, no path resolution is performed on the path segments.
