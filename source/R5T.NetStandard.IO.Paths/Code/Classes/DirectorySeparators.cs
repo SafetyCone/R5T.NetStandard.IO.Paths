@@ -8,22 +8,17 @@ namespace R5T.NetStandard.IO.Paths
     /// <summary>
     /// Separates <see cref="PathSegment"/>s (usually directory names and the file name) in a path.
     /// </summary>
-    public class DirectorySeparator : TypedString
+    public static class DirectorySeparators
     {
-        #region Static
-
-        /// <summary>
-        /// Separates directory path segments in Windows-style paths.
-        /// </summary>
-        public static readonly DirectorySeparator DefaultWindows = new DirectorySeparator(Constants.DefaultWindowsDirectorySeparator);
-        /// <summary>
-        /// Separates directory path segments in non-Windows-style paths.
-        /// </summary>
-        public static readonly DirectorySeparator DefaultNonWindows = new DirectorySeparator(Constants.DefaultNonWindowsDirectorySeparator);
         /// <summary>
         /// Provides the default directory separator on the currently executing platform.
         /// </summary>
-        public static readonly DirectorySeparator Default = new DirectorySeparator(Constants.DefaultDirectorySeparator);
+        public static readonly string PlatformDefaultDirectorySeparator = Utilities.PlatformDirectorySeparatorValue;
+
+        /// <summary>
+        /// Provides the default directory separator on the currently executing platform.
+        /// </summary>
+        public static readonly DirectorySeparator PlatformDefault = new DirectorySeparator(DirectorySeparators.PlatformDefaultDirectorySeparator);
 
 
         public static DirectorySeparator GetDefaultForPlatform(Platform platform)
@@ -44,19 +39,10 @@ namespace R5T.NetStandard.IO.Paths
 
         public static string GetDefaultValueForPlatform(Platform platform)
         {
-            var directorySeparator = DirectorySeparator.GetDefaultForPlatform(platform);
+            var directorySeparator = DirectorySeparators.GetDefaultForPlatform(platform);
 
             var directorySeparatorValue = directorySeparator.Value;
             return directorySeparatorValue;
-        }
-
-        #endregion
-
-
-
-        public DirectorySeparator(string value)
-            : base(value)
-        {
         }
     }
 }

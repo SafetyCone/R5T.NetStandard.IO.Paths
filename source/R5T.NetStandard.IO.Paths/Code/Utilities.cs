@@ -65,7 +65,7 @@ namespace R5T.NetStandard.IO.Paths
 
         public static DirectorySeparator GetDirectorySeparator(Platform platform)
         {
-            var directorySeparator = DirectorySeparator.GetDefaultForPlatform(platform);
+            var directorySeparator = DirectorySeparators.GetDefaultForPlatform(platform);
             return directorySeparator;
         }
 
@@ -79,7 +79,7 @@ namespace R5T.NetStandard.IO.Paths
 
         public static string GetDirectorySeparatorValue(Platform platform)
         {
-            var directorySeparatorValue = DirectorySeparator.GetDefaultValueForPlatform(platform);
+            var directorySeparatorValue = DirectorySeparators.GetDefaultValueForPlatform(platform);
             return directorySeparatorValue;
         }
 
@@ -925,7 +925,7 @@ namespace R5T.NetStandard.IO.Paths
 
         public static AbsolutePath Combine(AbsolutePath absolutePath, PathSegment pathSegment)
         {
-            var directorySeparator = DirectorySeparator.Default;
+            var directorySeparator = DirectorySeparators.PlatformDefault;
 
             var combinedPath = Utilities.Combine(directorySeparator, absolutePath, pathSegment);
             return combinedPath;
@@ -949,7 +949,7 @@ namespace R5T.NetStandard.IO.Paths
 
         public static AbsolutePath Combine(AbsolutePath absolutePath, params PathSegment[] pathSegments)
         {
-            var directorySeparator = DirectorySeparator.Default;
+            var directorySeparator = DirectorySeparators.PlatformDefault;
 
             var combinedPath = Utilities.Combine(directorySeparator, absolutePath, pathSegments);
             return combinedPath;
@@ -971,7 +971,7 @@ namespace R5T.NetStandard.IO.Paths
 
         public static FilePath GetFilePath(AbsolutePath absolutePath, params PathSegment[] pathSegments)
         {
-            var directorySeparator = DirectorySeparator.Default;
+            var directorySeparator = DirectorySeparators.PlatformDefault;
 
             var filePath = Utilities.GetFilePath(directorySeparator, absolutePath, pathSegments);
             return filePath;
@@ -1013,7 +1013,7 @@ namespace R5T.NetStandard.IO.Paths
 
         public static DirectoryPath GetDirectoryPath(AbsolutePath absolutePath, params PathSegment[] pathSegments)
         {
-            var directorySeparator = DirectorySeparator.Default;
+            var directorySeparator = DirectorySeparators.PlatformDefault;
 
             var directoryPath = Utilities.GetDirectoryPath(directorySeparator, absolutePath, pathSegments);
             return directoryPath;
