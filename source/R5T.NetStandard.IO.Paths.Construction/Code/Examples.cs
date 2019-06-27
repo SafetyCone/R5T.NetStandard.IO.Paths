@@ -6,6 +6,7 @@ using R5T.NetStandard.IO.Paths.Extensions;
 using R5T.NetStandard.OS;
 
 using PathUtilities = R5T.NetStandard.IO.Paths.Utilities;
+using PathUtilities2 = R5T.NetStandard.IO.Paths.UtilitiesExtra;
 
 
 namespace R5T.NetStandard.IO.Paths.Construction
@@ -31,7 +32,7 @@ namespace R5T.NetStandard.IO.Paths.Construction
             var filePath = @"C:\R5T.Code.VisualStudio.Types\R5T.Code.VisualStudio.Types.csproj".AsFilePath();
             var fileRelativePath = @"..\Temp.txt".AsFileRelativePath();
 
-            var resolvedFilePath = PathUtilities.GetFilePath(filePath, fileRelativePath);
+            var resolvedFilePath = PathUtilities2.GetFilePath(filePath, fileRelativePath);
 
             var describer = ObjectDescriber.Default;
             var writer = Examples.GetWriter();
@@ -46,7 +47,7 @@ namespace R5T.NetStandard.IO.Paths.Construction
             var osxUserRootDirectoryPath = @"/Users/User1".AsDirectoryPath();
             var tempDirectoryName = "temp".AsDirectoryName();
 
-            var osxUserTempDirectoryPath = PathUtilities.Combine(Platform.NonWindows, osxUserRootDirectoryPath, tempDirectoryName).AsDirectoryPath();
+            var osxUserTempDirectoryPath = PathUtilities2.Combine(Platform.NonWindows, osxUserRootDirectoryPath, tempDirectoryName).AsDirectoryPath();
 
             var describer = ObjectDescriber.Default;
             var writer = Examples.GetWriter();
@@ -59,7 +60,7 @@ namespace R5T.NetStandard.IO.Paths.Construction
             var directoryName = "Images".AsDirectoryName();
             var fileName = "8686.jpg".AsFileName();
 
-            var filePath = PathUtilities.Combine(Platform.NonWindows, directoryPath, directoryName, fileName);
+            var filePath = PathUtilities2.Combine(Platform.NonWindows, directoryPath, directoryName, fileName);
 
             var writer = Examples.GetWriter();
 

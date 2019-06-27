@@ -2,7 +2,7 @@
 
 using R5T.NetStandard.IO.Paths.Extensions;
 
-using PathUtilities = R5T.NetStandard.IO.Paths.Utilities;
+using PathUtilities = R5T.NetStandard.IO.Paths.UtilitiesExtra;
 
 
 namespace R5T.NetStandard.IO.Paths.Testing

@@ -4,6 +4,7 @@ using R5T.NetStandard.IO.Paths.Extensions;
 using R5T.NetStandard.OS;
 
 using PathUtilities = R5T.NetStandard.IO.Paths.Utilities;
+using PathUtilities2 = R5T.NetStandard.IO.Paths.UtilitiesExtra;
 
 
 namespace R5T.NetStandard.IO.Paths.Testing
@@ -18,7 +19,7 @@ namespace R5T.NetStandard.IO.Paths.Testing
             var tempDirectoryName = "temp".AsDirectoryName();
             var expected = @"/Users/User1/temp".AsDirectoryPath();
 
-            var tempDirectoryPath = PathUtilities.Combine(Platform.NonWindows, osxUserRootDirectoryPath, tempDirectoryName).AsDirectoryPath();
+            var tempDirectoryPath = PathUtilities2.Combine(Platform.NonWindows, osxUserRootDirectoryPath, tempDirectoryName).AsDirectoryPath();
 
             Assert.AreEqual(expected.Value, tempDirectoryPath.Value);
         }
@@ -30,7 +31,7 @@ namespace R5T.NetStandard.IO.Paths.Testing
             var tempDirectoryName = "temp".AsDirectoryName();
             var expected = @"C:\Users\User1\temp".AsDirectoryPath();
 
-            var tempDirectoryPath = PathUtilities.Combine(Platform.Windows, osxUserRootDirectoryPath, tempDirectoryName).AsDirectoryPath();
+            var tempDirectoryPath = PathUtilities2.Combine(Platform.Windows, osxUserRootDirectoryPath, tempDirectoryName).AsDirectoryPath();
 
             Assert.AreEqual(expected.Value, tempDirectoryPath.Value);
         }
@@ -44,7 +45,7 @@ namespace R5T.NetStandard.IO.Paths.Testing
             var dataDirectoryName = "Data".AsDirectoryName();
             var expected = @"C:\Users\User\Dropbox\Organizations\Rivet\Data";
 
-            var directoryPath = PathUtilities.Combine(dropboxWindowsRootDirectoryPath, organizationsDirectoryName, organizationDirectoryName, dataDirectoryName);
+            var directoryPath = PathUtilities2.Combine(dropboxWindowsRootDirectoryPath, organizationsDirectoryName, organizationDirectoryName, dataDirectoryName);
 
             Assert.AreEqual(expected, directoryPath.Value);
         }

@@ -13,7 +13,7 @@ namespace R5T.NetStandard.IO.Paths
         /// <summary>
         /// Provides the default directory separator on the currently executing platform.
         /// </summary>
-        public static readonly string PlatformDefaultDirectorySeparator = Utilities.PlatformDirectorySeparatorValue;
+        public static readonly string PlatformDefaultDirectorySeparator = UtilitiesExtra.PlatformDirectorySeparatorValue;
 
         /// <summary>
         /// Provides the default directory separator on the currently executing platform.
