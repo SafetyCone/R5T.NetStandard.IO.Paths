@@ -23,9 +23,9 @@ namespace R5T.NetStandard.IO.Paths
         {
             get
             {
-                string windows() => Constants.DefaultWindowsDirectorySeparator;
-                string osx() => Constants.DefaultNonWindowsDirectorySeparator;
-                string linux() => Constants.DefaultNonWindowsDirectorySeparator;
+                string windows() => Constants.WindowsDirectorySeparator;
+                string osx() => Constants.NonWindowsDirectorySeparator;
+                string linux() => Constants.NonWindowsDirectorySeparator;
 
                 var output = OSHelper.OSPlatformSwitch(windows, osx, linux);
                 return output;
@@ -45,13 +45,13 @@ namespace R5T.NetStandard.IO.Paths
 
         public static Platform DetectPlatform(string path)
         {
-            var containsWindows = path.Contains(Constants.DefaultWindowsDirectorySeparator);
+            var containsWindows = path.Contains(Constants.WindowsDirectorySeparator);
             if (containsWindows)
             {
                 return Platform.Windows;
             }
 
-            var containsNonWindows = path.Contains(Constants.DefaultNonWindowsDirectorySeparator);
+            var containsNonWindows = path.Contains(Constants.NonWindowsDirectorySeparator);
             if (containsNonWindows)
             {
                 return Platform.NonWindows;
