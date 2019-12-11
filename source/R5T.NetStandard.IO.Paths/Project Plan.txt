@@ -13,7 +13,7 @@ All paths take the form:
 
 	[root]{optional, {directory separator}zero or more separated directory names}{optional, {directory separator}file name}
 
-Any path that beings with a root is a rooted, or absolute, path. Thus all paths take the form:
+Any path that begins with a root is a rooted, or absolute, path. Thus all paths take the form:
 
 	[absolute path]{optional, {directory separator} zero or more separated directory names}{optional, {directory separator}file name}
 
